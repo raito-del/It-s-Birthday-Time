@@ -1,0 +1,295 @@
+/* ==========================================================
+   style.css — লেআউট, ফন্ট, অ্যানিমেশন
+   ----------------------------------------------------------
+   রঙ এখানে সরাসরি লেখা না; সেগুলো themes.css থেকে আসে (var(--c1) ইত্যাদি)।
+   ফন্ট বদলাতে: font-family লাইনে নাম বদলাও (index.html এ Google Font লিংকও বদলাতে হবে)।
+   ========================================================== */
+
+@property --angle { syntax:"<angle>"; initial-value:0deg; inherits:false; }
+
+/* ---------- মূল ---------- */
+*{ box-sizing:border-box; }
+html,body{ margin:0; height:100%; }
+body{
+  font-family:'Fredoka', system-ui, sans-serif;               /* মূল ফন্ট */
+  color:var(--text);
+  background:linear-gradient(160deg, var(--bgA), var(--bgB)); /* পেছনের গ্রেডিয়েন্ট */
+  min-height:100vh; overflow:hidden;
+  transition:background .6s;
+}
+.hidden{ display:none !important; }
+
+/* ---------- পেছনের আলো ও তারা ---------- */
+.aurora{
+  position:fixed; inset:-20%; z-index:0; filter:blur(60px); opacity:.75;
+  background:
+    radial-gradient(circle at 20% 30%, var(--c2) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, var(--c3) 0%, transparent 42%),
+    radial-gradient(circle at 60% 80%, var(--c4) 0%, transparent 40%),
+    radial-gradient(circle at 30% 85%, var(--c1) 0%, transparent 38%);
+  animation:drift 16s ease-in-out infinite alternate;   /* আলো নড়ার গতি */
+}
+@keyframes drift{
+  0%  {transform:translate(0,0) rotate(0)}
+  50% {transform:translate(4%,-3%) rotate(20deg) scale(1.08)}
+  100%{transform:translate(-3%,4%) rotate(-15deg)}
+}
+.stars{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+.stars i{
+  position:absolute; width:3px; height:3px; border-radius:50%;
+  background:#fff; box-shadow:0 0 8px 2px rgba(255,255,255,.8);
+  animation:twinkle ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{opacity:.15; transform:scale(.6)}
+  50%    {opacity:1;   transform:scale(1.2)}
+}
+
+/* ---------- বেলুন ---------- */
+#intro{ position:fixed; inset:0; z-index:5; overflow:hidden; }
+.balloon{
+  position:absolute; bottom:-170px; width:74px; cursor:pointer;
+  animation:rise linear forwards;               /* উঠার গতি JS থেকে আসে */
+  transition:transform .2s;
+}
+.balloon:hover{ transform:scale(1.1); }
+.balloon .sway{ animation:sway 3s ease-in-out infinite alternate; }  /* দুলুনি */
+.balloon .string{
+  position:absolute; left:50%; top:100%; width:1px; height:70px;
+  background:linear-gradient(#fff, transparent); opacity:.7;
+}
+@keyframes rise{ to{ transform:translateY(calc(-100vh - 240px)); } }
+@keyframes sway{ from{transform:rotate(-4deg)} to{transform:rotate(4deg)} }
+
+/* ফাটার অ্যানিমেশন */
+.pop{ animation:poof .28s forwards !important; }
+@keyframes poof{ to{ transform:scale(1.6); opacity:0; } }
+.shard{
+  position:fixed; pointer-events:none; z-index:9; font-size:18px;
+  animation:boom 1s ease-out forwards;
+}
+@keyframes boom{
+  to{ transform:translate(var(--x), var(--y)) rotate(360deg) scale(.2); opacity:0; }
+}
+
+/* কাউন্টার (উপরের পিল) */
+#counter{
+  position:absolute; top:18px; left:50%; transform:translateX(-50%); z-index:6;
+  padding:8px 20px; border-radius:999px;
+  background:rgba(255,255,255,.85); color:var(--text); font-weight:700;
+  box-shadow:0 8px 22px rgba(0,0,0,.18); white-space:nowrap;
+}
+#counter b{ color:var(--c1); font-size:1.15rem; }
+
+/* ইচ্ছার বাবল (উপরে ভাসে) */
+.wishBubble{
+  position:fixed; left:50%; top:86px; transform:translateX(-50%); z-index:12;
+  padding:12px 22px; border-radius:20px; max-width:88vw; text-align:center;
+  background:rgba(255,255,255,.95); color:#222;
+  box-shadow:0 14px 36px rgba(0,0,0,.25); pointer-events:none;
+  animation:wishIn .5s cubic-bezier(.3,1.5,.6,1) forwards;
+}
+.wishBubble .kw{
+  font-family:'Caveat', cursive; font-size:1.9rem; font-weight:700;
+  line-height:1; color:var(--c1);
+}
+.wishBubble .ln{
+  font-family:'Playfair Display', Georgia, serif; font-style:italic;
+  font-weight:700; font-size:1.02rem; margin-top:4px;
+}
+@keyframes wishIn{
+  from{opacity:0; transform:translate(-50%,-20px) scale(.7)}
+  to  {opacity:1; transform:translate(-50%,0) scale(1)}
+}
+.wishBubble.out{ animation:wishOut .5s ease forwards; }
+@keyframes wishOut{ to{ opacity:0; transform:translate(-50%,-30px); } }
+
+/* ---------- মোমবাতি ---------- */
+#candleWrap{
+  position:absolute; left:50%; top:55%; transform:translate(-50%,-50%);
+  text-align:center; z-index:7; animation:pop .7s ease;
+}
+#candleWrap p{
+  font-family:'Caveat', cursive; font-size:2.2rem; margin:0 0 10px;
+  color:#fff; text-shadow:0 0 16px var(--c1);
+}
+.candle{
+  width:36px; height:120px; margin:0 auto; position:relative;
+  border-radius:6px 6px 4px 4px;
+  background:repeating-linear-gradient(135deg,#fff7ed 0 8px,#fde68a 8px 16px);
+  box-shadow:inset -6px 0 0 rgba(0,0,0,.1), 0 10px 24px rgba(0,0,0,.2);
+}
+.wick{
+  position:absolute; top:-10px; left:50%; width:2px; height:10px;
+  margin-left:-1px; background:#222;
+}
+.flame{
+  position:absolute; top:-52px; left:50%; width:26px; height:42px; margin-left:-13px;
+  cursor:pointer; border-radius:50% 50% 40% 40% / 60% 60% 40% 40%;
+  background:radial-gradient(ellipse at 50% 75%, #fff 0, #fef08a 25%, #fb923c 60%, #ef4444 100%);
+  box-shadow:0 0 22px 8px rgba(251,146,60,.7);
+  animation:flick .5s infinite alternate ease-in-out;
+  transition:opacity .4s, transform .4s;
+}
+.flame:hover{ transform:scale(1.15); }
+.flame.out{ opacity:0; transform:scale(.2) translateY(-20px); }
+@keyframes flick{
+  from{transform:scale(1,1) skewX(-3deg)}
+  to  {transform:scale(.92,1.08) skewX(3deg)}
+}
+.hint2{ font-size:.95rem; margin-top:12px; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,.3); }
+@keyframes pop{
+  from{opacity:0; transform:translate(-50%,-50%) scale(.7)}
+  to  {opacity:1; transform:translate(-50%,-50%) scale(1)}
+}
+
+/* ---------- ইচ্ছার স্টিকার পাতা ---------- */
+#reel{
+  position:fixed; inset:0; z-index:4; overflow:auto;
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  animation:fadeIn .6s ease;
+}
+@keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+.reelInner{ max-width:600px; width:100%; text-align:center; }
+.reelInner h2{
+  font-family:'Playfair Display', serif; font-style:italic; font-weight:900;
+  font-size:clamp(1.8rem,6vw,2.4rem); margin:0 0 6px; color:#fff;
+  text-shadow:0 2px 14px rgba(0,0,0,.25);
+}
+.reelInner .sub{ color:#fff; opacity:.9; margin:0 0 20px; }
+.stickers{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+.sticker{
+  background:#fff; color:#222; border-radius:16px; padding:10px 14px;
+  font-size:.92rem; max-width:250px; text-align:left;
+  box-shadow:0 10px 24px rgba(0,0,0,.2);
+  transform:rotate(var(--r)) scale(0);
+  animation:stick .6s cubic-bezier(.3,1.6,.6,1) forwards;
+}
+.sticker .kw{
+  font-family:'Caveat', cursive; font-size:1.4rem; font-weight:700;
+  color:var(--c1); line-height:1;
+}
+@keyframes stick{ to{ transform:rotate(var(--r)) scale(1); } }
+.reelBtn{ margin-top:26px; }
+
+/* ---------- বার্থডে কার্ড ---------- */
+#card{
+  position:fixed; inset:0; overflow:auto; z-index:2;
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  animation:fadeIn .9s ease;
+}
+.wrap{
+  position:relative; max-width:520px; width:100%; border-radius:30px; padding:2px;
+  background:conic-gradient(from var(--angle), var(--c1), var(--c2), var(--c3), var(--c4), var(--c1));
+  animation:spin 6s linear infinite;             /* ঘূর্ণায়মান বর্ডার */
+  box-shadow:0 0 50px var(--glow);
+}
+@keyframes spin{ to{ --angle:360deg; } }
+.panel{
+  position:relative; border-radius:28px; padding:34px 26px; text-align:center;
+  background:var(--card);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+}
+.kicker{ font-family:'Caveat', cursive; font-size:1.7rem; margin:0; color:var(--c1); }
+.title{
+  font-family:'Playfair Display', Georgia, serif; font-style:italic; font-weight:900;
+  font-size:clamp(2.2rem,8vw,3.2rem); margin:4px 0 18px; line-height:1.05;
+  background:linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c1));
+  background-size:250% auto;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:shine 4s linear infinite;
+}
+@keyframes shine{ to{ background-position:250% center; } }
+
+/* পোলারয়েড ছবি */
+.polaroid{
+  width:100%; max-width:300px; margin:0 auto; background:#fff;
+  padding:12px 12px 46px; border-radius:6px;
+  box-shadow:0 18px 40px rgba(0,0,0,.22);
+  transform:rotate(-3deg);
+  transition:transform .5s cubic-bezier(.3,1.4,.6,1);
+}
+.polaroid:hover{ transform:rotate(0) scale(1.03); }
+.photo{
+  width:100%; aspect-ratio:1/1; border-radius:3px; overflow:hidden;
+  display:flex; align-items:center; justify-content:center; font-size:72px;
+  background:conic-gradient(from 45deg, var(--c2), var(--c3), var(--c4), var(--c1), var(--c2));
+}
+.photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* নিচের লেখা (অক্ষর একটা একটা করে ভাসে) */
+.bottom{
+  font-family:'Playfair Display', Georgia, serif; font-weight:900;
+  font-size:clamp(1.2rem,4.4vw,1.6rem); line-height:1.35;
+  margin:26px 0 24px; min-height:4em;
+}
+.bottom span{
+  display:inline-block; opacity:0; transform:translateY(12px) rotate(4deg);
+  animation:letter .6s cubic-bezier(.3,1.4,.6,1) forwards;
+}
+@keyframes letter{ to{ opacity:1; transform:none; } }
+
+/* বাটন */
+.btn{
+  position:relative; overflow:hidden; font-family:inherit; font-weight:700;
+  font-size:1.15rem; border:0; border-radius:999px; padding:14px 38px; cursor:pointer; color:#fff;
+  background:linear-gradient(120deg, var(--c1), var(--c3), var(--c1));
+  background-size:200% auto;
+  box-shadow:0 10px 26px var(--glow);
+  transition:transform .2s, background-position .6s;
+}
+.btn:hover{ transform:translateY(-2px) scale(1.05); background-position:right center; }
+
+.cheer{
+  font-family:'Caveat', cursive; font-size:clamp(2rem,8vw,2.8rem); font-weight:700;
+  margin:18px 0 0;
+  background:linear-gradient(90deg, var(--c1), var(--c2), var(--c3));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:pop2 .7s cubic-bezier(.3,1.5,.6,1);
+}
+@keyframes pop2{ from{opacity:0; transform:scale(.4) rotate(-6deg)} to{opacity:1; transform:none} }
+
+/* ---------- কনফেটি ---------- */
+.deco{ position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+.piece{ position:absolute; top:-30px; animation:fall linear forwards; }
+@keyframes fall{ to{ transform:translate(var(--drift), 110vh) rotate(900deg); } }
+
+/* ---------- "Made by" ক্রেডিট ---------- */
+.madeBy{
+  position:fixed; right:14px; bottom:12px; z-index:21;
+  font-family:'Caveat', cursive; font-size:1.1rem; font-weight:700;
+  padding:4px 12px; border-radius:999px;
+  background:rgba(255,255,255,.7); color:var(--text);
+  box-shadow:0 4px 14px rgba(0,0,0,.12);
+  pointer-events:none; user-select:none;
+}
+
+/* ---------- Customize প্যানেল ---------- */
+#toggleEdit{
+  position:fixed; left:16px; bottom:16px; z-index:20;
+  background:linear-gradient(120deg, var(--c1), var(--c3)); color:#fff;
+  border:0; border-radius:999px; padding:10px 16px; font-weight:700; font-family:inherit;
+  cursor:pointer; box-shadow:0 8px 20px var(--glow);
+}
+#editor{
+  position:fixed; left:0; right:0; bottom:0; z-index:19;
+  max-height:70vh; overflow:auto; padding:20px;
+  background:#fff; color:#222; border-radius:22px 22px 0 0;
+  box-shadow:0 -10px 40px rgba(0,0,0,.2);
+  transform:translateY(105%); transition:transform .4s;
+  font-family:system-ui, sans-serif;
+}
+#editor.open{ transform:none; }
+#editor h3{ margin:0 0 10px; font-family:'Playfair Display', serif; }
+#editor label{ display:block; font-size:.85rem; font-weight:700; margin:10px 0 4px; }
+#editor input, #editor textarea{
+  width:100%; padding:9px 11px; border:1px solid #ddd; border-radius:10px;
+  font:inherit; font-size:.95rem;
+}
+#editor textarea{ min-height:60px; resize:vertical; }
+.themes{ display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+.themes button{
+  width:34px; height:34px; border-radius:50%; cursor:pointer;
+  border:2px solid #fff; outline:1px solid #ccc;
+}

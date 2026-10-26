@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================
+  index.html — পেজের কাঠামো
+  • লেখা, নাম, বয়স বদলাতে → js/config.js
+  • রঙ বদলাতে → css/themes.css
+  • লেআউট/অ্যানিমেশন বদলাতে → css/style.css
+  এই ফাইলে সাধারণত কিছু বদলানোর দরকার হয় না।
+  ==========================================================
+-->
+<html lang="en" data-theme="sunshine">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>It's Birthday Time 🎂</title>
+
+  <!-- Google Fonts: নতুন ফন্ট লাগলে এই লিংক বদলাও -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+
+  <!-- থিমের রঙ -->
+  <link rel="stylesheet" href="css/themes.css">
+  <!-- লেআউট ও অ্যানিমেশন -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ব্যাকগ্রাউন্ড সাজানো (বদলানোর দরকার নেই) -->
+  <div class="aurora"></div>
+  <div class="stars" id="stars"></div>
+
+  <!-- ধাপ ১: বেলুন ও মোমবাতি -->
+  <div id="intro">
+    <!-- কাউন্টার: কতগুলো ফাটালো / কতগুলো লাগবে -->
+    <div id="counter">Balloons popped: <b id="popCount">0</b> / <span id="needCount">21</span></div>
+
+    <!-- মোমবাতি: সংখ্যা পূর্ণ হলে দেখাবে -->
+    <div id="candleWrap" class="hidden">
+      <p>Make a wish ✨</p>
+      <div class="candle">
+        <div class="wick"></div>
+        <div class="flame" id="flame" title="Blow it"></div>
+      </div>
+      <div class="hint2">Tap the flame to blow it out</div>
+    </div>
+  </div>
+
+  <!-- ধাপ ২: ফু দেওয়ার পর ইচ্ছার স্টিকার -->
+  <section id="reel" class="hidden">
+    <div class="reelInner">
+      <h2>Your wishes ✨</h2>
+      <p class="sub">Every balloon you popped carried its own word</p>
+      <div class="stickers" id="stickers"></div>
+      <button class="btn reelBtn" id="openCard">Open my birthday card 🎁</button>
+    </div>
+  </section>
+
+  <!-- কনফেটির জায়গা -->
+  <div class="deco" id="decoLayer"></div>
+
+  <!-- ধাপ ৩: বার্থডে কার্ড -->
+  <section id="card" class="hidden">
+    <div class="wrap">
+      <div class="panel">
+        <p class="kicker" id="nameLine"></p>
+        <h1 class="title" id="headline"></h1>
+        <div class="polaroid"><div class="photo" id="photo"></div></div>
+        <div class="bottom" id="bottomText"></div>
+        <button class="btn" id="celebrate">Let's celebrate! 🎉</button>
+        <p class="cheer hidden" id="cheer"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ক্রেডিট: ডান নিচে -->
+  <div class="madeBy">Made by Sadnan Ahmed</div>
+
+  <!-- Customize প্যানেল -->
+  <button id="toggleEdit">✏️ Customize</button>
+  <aside id="editor">
+    <h3>Customize</h3>
+
+    <label for="inName">Friend's name</label>
+    <input id="inName">
+
+    <label for="inHeadline">Headline</label>
+    <input id="inHeadline">
+
+    <label for="inNeed">কতগুলো বেলুন ফাটালে মোমবাতি আসবে</label>
+    <input id="inNeed" type="number" min="1" max="200">
+
+    <label for="inItems">Balloon items: প্রতি লাইনে একটা — কিওয়ার্ড | লাইন</label>
+    <textarea id="inItems" style="min-height:140px"></textarea>
+
+    <label for="inPhoto">Photo URL বা assets/photo.jpg</label>
+    <input id="inPhoto" placeholder="https://... বা assets/photo.jpg">
+
+    <label for="inBottom">Bottom text (ছবির নিচের লেখা)</label>
+    <textarea id="inBottom"></textarea>
+
+    <label for="inCheer">Celebrate-এ যে লেখা আসবে</label>
+    <input id="inCheer">
+
+    <label>Theme</label>
+    <div class="themes" id="themeBtns"></div>
+  </aside>
+
+  <!-- স্ক্রিপ্টের ক্রম গুরুত্বপূর্ণ: config → main → editor -->
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/editor.js"></script>
+</body>
+</html>
